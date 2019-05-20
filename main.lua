@@ -25,6 +25,8 @@ function love.load()
 	math.randomseed(os.time())
 
 	smallFont = love.graphics.newFont('font.ttf', 8)
+	scoreFont = love.graphics.newFont('font.ttf', 32)
+
 	love.graphics.setFont(smallFont)
 
 	push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -32,6 +34,9 @@ function love.load()
 		resizable = false,
 		vsync = true
 	})
+
+	player1Score = 0
+	player2Score = 0
 
 	player1 = Paddle(5, 30, 5, 20)
 	player2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 30, 5, 20)
@@ -93,7 +98,12 @@ function love.update(dt)
 	end
 
 
-	if ball.x >= VIRTUAL_WIDTH or ball.x <= 0 then
+	if ball.x >= VIRTUAL_WIDTH then
+		player1Score = player1Score + 1
+		ball:reset()
+	end
+	if ball.x <= 0 then
+		player2Score = player2Score + 1
 		ball:reset()
 	end
 
@@ -126,6 +136,13 @@ function love.draw()
 
 	love.graphics.clear(40/255, 45/255, 52/255, 1)
 	love.graphics.printf('Hello Pong!', 0, 20, VIRTUAL_WIDTH, 'center')
+
+	-- Draw the score
+	love.graphics.setFont(scoreFont)
+	love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGHT / 3)
+	love.graphics.print(tostring(player2Score), VIRTUAL_WIDTH / 2 + 30, VIRTUAL_HEIGHT / 3)
+
+
 
 	player1:render()
 	player2:render()
