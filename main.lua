@@ -51,6 +51,55 @@ end
 -- Update function
 -- Takes dt: delta time
 function love.update(dt)
+	if ball:collides(player1) then
+		-- if ball collides with player1, reverse de direction in x 
+		-- and slightly increase the speed
+		ball.dx = -ball.dx * 1.2
+		ball.x = player1.x + 5 -- we have to shift the position because it will only move so far in the next frame and it will perpetually detect collision
+		-- 5 is the width of the paddle, so we ensure that they're no longer colliding
+
+		-- keep velocity in the same direction, but randomise it
+		if ball.dy < 0 then
+			ball.dy = -math.random(10, 150)
+		else
+			ball.dy = math.random(10, 150)
+		end
+	end
+
+	if ball:collides(player2) then
+		-- if ball collides with player1, reverse de direction in x 
+		-- and slightly increase the speed
+		ball.dx = -ball.dx * 1.2
+		ball.x = player2.x - 4 -- -4 is the width of the ball
+
+		-- keep velocity in the same direction, but randomise it
+		if ball.dy < 0 then
+			ball.dy = -math.random(10, 150)
+		else
+			ball.dy = math.random(10, 150)
+		end
+	end
+
+	-- Prevent if from going past the bottom or top edges
+	if ball.y <= 0 then
+		ball.y = 0
+		ball.dy = -ball.dy
+	end
+
+	-- -4 to account for the ball's size
+	if ball.y >= VIRTUAL_HEIGHT -4 then 
+		ball.y = VIRTUAL_HEIGHT - 4
+		ball.dy = - ball.dy
+	end
+
+
+	if ball.x >= VIRTUAL_WIDTH or ball.x <= 0 then
+		ball:reset()
+	end
+
+
+
+
 	if love.keyboard.isDown('w') then
 		player1.dy = -PADDLE_SPEED
 	elseif love.keyboard.isDown('s') then
