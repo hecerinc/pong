@@ -18,6 +18,7 @@ require 'Ball'
 
 -- Set up function
 function love.load()
+	love.window.setTitle('Pong pong')
 	love.graphics.setDefaultFilter('nearest', 'nearest')
 
 	-- Set up random seed
@@ -81,6 +82,13 @@ function love.draw()
 	player2:render()
 	ball:render()
 
+	displayFPS()
+
 	push:apply('end')
 end
 
+function displayFPS()
+	love.graphics.setFont(smallFont)
+	love.graphics.setColor(0, 1, 0, 1)
+	love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10)
+end
